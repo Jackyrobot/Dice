@@ -1,111 +1,106 @@
-int xSize = 20;
-int ySize = 20;
-int gridSize = 50; 
-int[][]board = new int [ySize][xSize]; //2D array creating the gameboard
-int player = 1; 
+int m = 20;
+float s = m* .6;
+int count = 0;
 
-void setup() 
+void setup()
 {
-  size(950,950); 
-  ellipseMode(CORNER); 
+	background(255);
+	size(880,840);
+	noLoop();
 }
-int piece(int y, int x) 
-{   
-    return board[y][x];
-}
-int getWinner() //determine winner if 5 in a row vert, horizontal, or diagonal
-{ 
-  //check row 
-  for(int y = 0; y < ySize; y++)
-    for(int x = 0; x < xSize; x++)
-      if (piece(y,x) !=0 && piece(y,x) == piece(y,x+1) 
-                     && piece(y,x) == piece(y,x+2)
-                     && piece(y,x) == piece(y,x+3)
-                     && piece(y,x) == piece(y,x+4))
-         return piece(y,x);  
 
-  // check column
-  for(int y = 0; y < ySize; y++)
-    for(int x = 0; x < xSize; x++)
-      if(piece(y,x) !=0 && piece(y,x)==piece(y+1,x) 
-                    && piece(y,x)==piece(y+2,x)
-                    &&piece(y,x)==piece(y+3,x)
-                    && piece(y,x)==piece(y+4,x))
-         return piece(y,x); 
-    
-  // check diagonal
-  for(int y = 0; y < ySize; y++)
-    for(int x = 0; x < xSize; x++) 
-      for (int d = -1; d <= 1; d+=2)
-         if(piece(y,x) !=0  && piece(y,x) == piece(y+1*d,x+1) 
-                      && piece(y,x) == piece(y+2*d,x+2) 
-                      && piece(y,x) == piece(y+3*d,x+3) 
-                      && piece(y,x) == piece(y+4*d,x+4))
-          return piece(y,x);   
-    
-  //check tie
-  for(int y = 0; y < ySize; y++)
-    for(int x=0; x < xSize; x++)
-      if (piece(y,x)==0) 
-        return 0; //winner 
-      return -1; // tie
+void draw()
+{
+	//your code here
+	for (int a = 0; a <= m*90; a = a + m*4)
+	{
+		for (int b = 0; b <= m*90; b = b + m*4)
+		{
+			Die dice = new Die(a,b);
+			dice.show();
+			dice.roll();
+		}
+	}
 }
+
 void mousePressed()
 {
-  int x = mouseX/gridSize;
-  int y = mouseY/gridSize; 
-  if(y >= 0)
-  {
-    board[y][x] = player; 
-    if(player == 1)
-      player = 2;
-    else
-      player = 1;
- }
+	redraw();
+	count = 0;
 }
-void draw() 
-{
-  if(getWinner() ==0){
-    for(int j = 0; j < ySize; j++) 
-       for(int i = 0; i < xSize; i++){  
-         fill(182, 155, 76); //wood color
-         rect(i * gridSize, j * gridSize, gridSize, gridSize); // create lines as graphics for gameboard
 
-  if(board [j][i] > 0)
-    {
-     if(board[j][i] == 1)
-       fill(255);
-     else
-       fill(0);
-     ellipse (i * gridSize, j * gridSize, gridSize, gridSize);
-     }
-    }
-  } 
-  else // end game
-   {
-    background(255); 
-    fill(0);  
-    if(getWinner() == 1)
-    {
-      textSize(60);
-      text("White Wins!!!", width/2-130, height/2);
-    }
-    if(getWinner() == 2)
-    {
-      textSize(60);
-      text("Black Wins!!!", width/2-130, height/2);
-    }
-    if(getWinner() == -1)
-    {
-       textSize(60);
-       text("Tie :(", width/2, height/2);
-    }
-   if(keyPressed && key == ' ') //function to restart game
-   {
-      player = 1;
-      for(int y = 0; y < ySize; y++)
-        for(int x= 0 ; x < xSize; x++) 
-          board [y][x] = 0; 
-   }
- }
+class Die //models one single dice cube
+{
+	//variable declarations here
+	int x1, y1, num;
+	Die(int x, int y) 
+	{
+		//variable initializations here
+		int m = 200;
+		x1 = x;
+		y1 = y;
+		num = (int)((Math.random()*6)+1);
+		count = count + num;
+	}
+
+	void roll()
+	{
+		noStroke();
+		fill(0);
+		//your code here
+		if(num == 1) 
+		{
+			ellipse(x1+40, y1+40, s, s);
+		}
+		else if(num == 2)
+		{
+			ellipse(x1+20, y1+20, s, s);
+			ellipse(x1+60, y1+60, s, s);
+		}
+		else if(num == 3)
+		{
+			ellipse(x1+20, y1+20, s, s);
+			ellipse(x1+40, y1+40, s, s);
+			ellipse(x1+60, y1+60, s, s);
+		}
+		else if(num == 4)
+		{
+			ellipse(x1+20, y1+20, s, s);
+			ellipse(x1+60, y1+20, s, s);
+			ellipse(x1+20, y1+60, s, s);
+			ellipse(x1+60, y1+60, s, s);
+		}
+		else if(num == 5)
+		{
+			ellipse(x1+20, y1+20, s, s);
+			ellipse(x1+60, y1+20, s, s);
+			ellipse(x1+20, y1+60, s, s);
+			ellipse(x1+60, y1+60, s, s);
+			ellipse(x1+40, y1+40, s, s);
+		}
+		else if(num == 6)
+		{
+			ellipse(x1+20, y1+20, s, s);
+			ellipse(x1+60, y1+20, s, s);
+			ellipse(x1+20, y1+60, s, s);
+			ellipse(x1+60, y1+60, s, s);
+			ellipse(x1+40, y1+20, s, s);
+			ellipse(x1+40, y1+60, s, s);
+		}
+	}
+
+	void show()
+	{
+		//your code here
+		stroke(255,255,255);
+     	fill(255,200,100);
+  		rect(x1,y1,m*4,m*4,m*.8);
+
+  		//Displays total dice value
+  		fill(0);
+  		rect(0, 800, 880, 840);
+  		fill(255);
+  		textSize(30);
+  		text("Total: " + count, 20, 830);
+	}
 }
